@@ -393,18 +393,18 @@ def recreate_training_data(speaker, prediction):
 
 # Converts training emeddings to corresponding vectors
 def convert_emb_to_vec_train(model, embeddings_df):
-    embeddings_df['Vector'] = embeddings_df['Embedding'].apply(lambda x: np.squeeze(encoder_trained.predict(np.array(x).reshape(1,512,300,1))))
+    embeddings_df['Vector'] = embeddings_df['Embedding'].apply(lambda x: np.squeeze(model.predict(np.array(x).reshape(1,512,300,1))))
     return embeddings_df[['Speaker','Vector']]
 
 # Converts validation and testing emeddings to corresponding vectors
 def convert_emb_to_vec(model, df):
     df['Embedding'] = df['SampleName'].apply(lambda x: get_fft_spectrum(x))
-    df['Vector'] = df['Embedding'].apply(lambda x: np.squeeze(encoder_trained.predict(np.array(x).reshape(1,*np.array(x).shape,1))))
+    df['Vector'] = df['Embedding'].apply(lambda x: np.squeeze(model.predict(np.array(x).reshape(1,*np.array(x).shape,1))))
     return df[['SampleName','Speaker','Vector']]
 
 
 """Validation Samples: 5
-   Tsting Samples: 5
+   Testing Samples: 5
    Model tested on validation samples. 
    For each incorrect prediction one triplet is added to the training set of triplets.
    Model is retrained, saved and tested on Test Samples."""  
